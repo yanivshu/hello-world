@@ -21,19 +21,24 @@ class App extends Component {
         <Fragment>
 
           <div className="App">
+ 
             {this.props.userName == '' ?
               <div>
+                 <Redirect to={{
+                  pathname: '/'
+                }} />
                 <Route path="/" exact component={Login} />
               </div>
               :
-
               <div>
-
                 <Redirect to={{
                   pathname: '/dashboard'
                 }} />
 
                 <Route path="/dashboard" component={Dashboard} />
+                
+                
+
               </div>}
 
           </div>

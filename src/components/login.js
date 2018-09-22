@@ -1,136 +1,128 @@
-        import React, { Component } from "react";
-        import {Fragment} from 'react'
+import React, { Component } from "react";
+import {Fragment} from 'react'
 
-        import "../css/App.css";
-        import { connect } from "react-redux";
-        import { _getUsers, _getUsersArray } from '../util/_DATA'
-        import {Redirect} from 'react-router-dom'
-
-
-
-        class Login extends Component {
-
-          
-          constructor(props) {
-            super(props);
-            
-
-            
-
-            
-            
-            this.state = {
-                usersArray: []
-
-                
-                };
+import "../css/App.css";
+import { connect } from "react-redux";
+import { _getUsers, _getUsersArray } from '../util/_DATA'
+import {Redirect} from 'react-router-dom'
 
 
-                
-              
-            //window.alert("users " + props.state);
-              }
-          
 
-          componentDidMount(){
-              
-           
+class Login extends Component {
 
-            let listArrayTemp = []
-
-            if(this.state.usersArray.length === 0)
-            {
-            Promise.all([
-                _getUsers()
-              ]).then(users => { 
-
-                for (var key in users[0]) {
-                    if (users[0].hasOwnProperty(key)) {
-                        var obj = key;
-                        
-                        
-                        this.setState( (state) => {
-                            state.usersArray = state.usersArray.concat(users[0][key].name);
-                            listArrayTemp = state.usersArray
-                        });
-                  
-                    }
-                }        
-              });
-            }
-          }
-
-          handleChange = (event) => {
-            
   
-          this.props.updateUserName( event.target.value);
+  constructor(props) {
+    super(props);
+    
 
+    
 
+    
+    
+    this.state = {
+        usersArray: []
 
-
-          };
-
-          
-
-          render() {
-
-            const { options, value } = this.state;
-
-            
-            
-            return (
-
-              <p className="App-intro">
-
-        {  
-
-          
-
-            <Fragment>
-           
-                <button onClick={() => this.setState({})}  >Sign in</button>
-  
-          
-                    <select id="select" onChange={this.handleChange} value={value}>
-                    <option value="0">Choose user</option>
-                  
-                    {this.state.usersArray.map(element => <option value={element}>{element}</option>)}
-
-                   
-                    </select>
-
-                  
-                  </Fragment>
-                  
-
-        }
-
-
-
-              </p>
-
-            );
-          }
-        }
+        
+        };
 
 
         
-        const mapStateToProps = state => {
-          return {
-             userName: state.userName,
-             usersList: state.usersList
-          };
-        };
+      
+    //window.alert("users " + props.state);
+      }
+  
 
-        const mapDispachToProps = dispatch => {
-          return {
-             
-            updateUserName: (name) => dispatch({ type: "USER_NAME", value: name }),
+  componentDidMount(){
+      
+    
+    if(this.state.usersArray.length === 0)
+    {
+    Promise.all([
+        _getUsers()
+      ]).then(users => { 
+        for (var key in users[0]) {
+            if (users[0].hasOwnProperty(key)) {
+                var obj = key;
+                const usersCopy = this.state.usersArray.concat(users[0][key].name)
+                this.setState(() => ({
+                  usersArray: usersCopy
+                }))
+          
+            }
+        }        
+      });
+    }
+  }
 
 
-          };
-        };
-        export default connect(
-          mapStateToProps,
-          mapDispachToProps
-        )(Login);
+  handleChange = (event) => {
+    
+
+  this.props.updateUserName( event.target.value);
+
+
+
+
+  };
+
+  
+
+  render() {
+
+    const { options, value } = this.state;
+
+    
+    
+    return (
+
+      <p className="App-intro">
+
+{  
+
+  
+
+    <Fragment>
+   
+            <select id="select" onChange={this.handleChange} value={value}>
+            <option value="0">Choose user</option>
+          
+            {this.state.usersArray.map(element => <option value={element}>{element}</option>)}
+
+           
+            </select>
+
+          
+          </Fragment>
+          
+
+}
+
+
+
+      </p>
+
+    );
+  }
+}
+
+
+
+const mapStateToProps = state => {
+  return {
+     userName: state.userName,
+     usersList: state.usersList
+  };
+};
+
+const mapDispachToProps = dispatch => {
+  return {
+     
+    updateUserName: (name) => dispatch({ type: "USER_NAME", value: name }),
+
+
+  };
+};
+export default connect(
+  mapStateToProps,
+  mapDispachToProps
+)(Login);
